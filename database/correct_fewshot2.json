@@ -1,0 +1,10 @@
+{
+    "Result: None": "/* Fix the SQL and answer the question */\n#question: Tổng số dư của khách hàng Nguyễn Văn A?\ndefine: name = 'Nguyễn Văn A'\n#Error SQL: SELECT SUM(balance) FROM TBL_LD WHERE client_name = 'Nguyễn Văn A';\nError: Result: None\n#values: TBL_LD.client_name = 'Nguyễn Văn A'\n#Change Ambiguity: client_name => customer_name\n#SQL: SELECT SUM(balance) FROM TBL_LD WHERE customer_name = 'Nguyễn Văn A';",
+  
+    "no such column": "/* Fix the SQL and answer the question */\n#question: Liệt kê các khoản vay của khách hàng có lãi suất > 10%.\ndefine: interest_rate > 10\n#Error SQL: SELECT loan_id FROM t24_ld_loans_and_depo__mnp WHERE rate > 10;\nError: no such column: rate\n#values: rate => interest_rate\n#SQL: SELECT loan_id FROM t24_ld_loans_and_depo__mnp WHERE interest_rate > 10;",
+  
+    "ambiguous column name": "/* Fix the SQL and answer the question */\n#question: Tổng số dư và tên khách hàng.\ndefine: tổng số dư = SUM(balance)\n#Error SQL: SELECT name, SUM(balance) FROM TBL_LD INNER JOIN t24_customer__s2 ON customer_id = id;\nError: ambiguous column name: name\n#columns: TBL_LD.customer_name, t24_customer__s2.name\n#Change Ambiguity: name => TBL_LD.customer_name\n#SQL: SELECT TBL_LD.customer_name, SUM(balance) FROM TBL_LD INNER JOIN t24_customer__s2 ON TBL_LD.customer_id = t24_customer__s2.id;",
+  
+    "default": "/* Fix the SQL and answer the question */\n#question: Liệt kê 3 tài khoản có số dư cao nhất.\n#Error SQL: SELECT id, balance FROM TBL_LD ORDER BY balance DESC LIMIT 3;\nError: Result: None\n#Change Ambiguity: id => account_id\n#SQL: SELECT account_id, balance FROM TBL_LD ORDER BY balance DESC LIMIT 3;"
+  }
+  

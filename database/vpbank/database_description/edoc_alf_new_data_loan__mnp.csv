@@ -1,0 +1,23 @@
+﻿Column,Column Description,Value Description,Type,Example Values
+app_id,,,TEXT,"487b6fae9f3bdae5fcccd30697bfe11f, b80266a29a93149d1d8c2a770480c237, 256ce53ccbcd103a1f042266ac9f25d9"
+ld_code,,,TEXT,"01147635a77cb796ca883080eae77042, 07dee7096d8dd86b25d2d7edccf4f491, 3c587381fc05c4a2495a7fd6bae92193"
+current_outstanding_balance,,,TEXT,0132f0d7ac42e300d9b512a2f04a31a5
+out_of_date,,,TEXT,bafd7322c6e97d25b6299b5d6fe8920b
+ld_confirm,,,TEXT,
+debt_collection_account,,,TEXT,
+debt_payment_method,,,TEXT,
+repayment_period,,,TEXT,
+current_interest,,,TEXT,
+early_repayment_fee,,,TEXT,
+preferential_rebate,,,TEXT,
+total_amount_due_coll,,,TEXT,
+pd_confirm,,,TEXT,
+pdld_number,,,TEXT,
+debt_collection_account_pd,,,TEXT,
+total_amount_overdue,,,TEXT,
+reasons_for_debt_collect,,,TEXT,
+data_datetime,,,TEXT,e09f7630b82b56a4e32a1c61cfbdcd92
+amount_proposed_to_repay,,,TEXT,
+mien_giam_confirm,,,TEXT,
+early_repayment_fee_qd,,,TEXT,
+loan_product,,,TEXT,

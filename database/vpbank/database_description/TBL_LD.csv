@@ -1,0 +1,11 @@
+﻿Column,Column Description,Value Description,Type,Example Values
+customer_id,,,TEXT,"41f227e5627e87349bce8c6c61c32560, e6f49fabdade7c64a3e1b6821ea67c38, a9170380c39263c877dfbf451ae36155"
+segment,,,TEXT,KHCN
+contract_no_,,,TEXT,"000330e58ef907ab3520c3ebf46bcd4f, 000397d3d7f215b31c59ac6fc056c19f, 00156851922f9f30306a16ccbcf9019b"
+currency,,,TEXT,VND
+co_code,,,TEXT,"VN0010001, VN0010102"
+value_date,,,,2025-01-01
+total_stmt_amt_lcy,,,,"74810475759.0, 73834493857.0, 74316347241.0"
+year,,,INT,2025
+month,,,INT,7
+day,,,INT,9

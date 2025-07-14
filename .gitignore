@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+
+# Virtual env
+.venv/
+env/
+venv/
+
+# VS Code / IDE config
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Log & results
+*.log
+*.out
+*.bak
+*.tmp
+
+# Ignore database files
+database/employees_db/vpbank.sqlite
+database/vpbank/vpbank.sqlite
+
+# Hoặc nếu muốn ignore tất cả file .sqlite:
+*.sqlite
+
+# # Token & API keys
+# llm_key.py
+
+# Ignore generated data
+data/banking_data.json
+
+# Notebook checkpoint
+.ipynb_checkpoints/
+
+# OS junk
+.DS_Store
+Thumbs.db
+opensearch
+opensearch2

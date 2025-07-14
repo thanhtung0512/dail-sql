@@ -1,0 +1,3 @@
+﻿Column,Column Description,Value Description,Type,Example Values
+customer_code,,,TEXT,"9d1d64b2ed5e13864737d63a319b49f3, 22c153864ed9ed375714cb08d3c058ac, ca4604023469d1c650e82654b61c5178"
+segment,,,TEXT,"KHCN, HH"

@@ -1,0 +1,71 @@
+{
+    "tables": [
+      {
+        "table_name": "banca_aia_agent_info__mnp",
+        "columns": ["agent_id", "agent_name", "branch", "status"]
+      },
+      {
+        "table_name": "t24_account_debit_int_details__mnp",
+        "columns": ["account_id", "debit_amount", "interest_rate", "date"]
+      },
+      {
+        "table_name": "t24_stmt_entry__fa",
+        "columns": ["entry_id", "account_id", "amount", "entry_date", "description"]
+      },
+      {
+        "table_name": "t24_ld_loans_and_depo__mnp",
+        "columns": ["loan_id", "customer_id", "amount", "start_date", "end_date"]
+      },
+      {
+        "table_name": "t24_customer__s2",
+        "columns": ["customer_id", "customer_name", "dob", "address", "phone"]
+      },
+      {
+        "table_name": "t24_ld_loans_and_depo_details__mnp",
+        "columns": ["loan_id", "payment_date", "principal_paid", "interest_paid"]
+      },
+      {
+        "table_name": "edoc_alf_new_data_loan__mnp",
+        "columns": ["doc_id", "loan_id", "customer_id", "document_type", "created_at"]
+      },
+      {
+        "table_name": "TBL_LD",
+        "columns": ["id", "loan_amount", "customer_id", "overdue_days"]
+      }
+    ],
+    "foreign_keys": [
+      {
+        "table": "t24_ld_loans_and_depo__mnp",
+        "column": "customer_id",
+        "references": {
+          "table": "t24_customer__s2",
+          "column": "customer_id"
+        }
+      },
+      {
+        "table": "t24_ld_loans_and_depo_details__mnp",
+        "column": "loan_id",
+        "references": {
+          "table": "t24_ld_loans_and_depo__mnp",
+          "column": "loan_id"
+        }
+      },
+      {
+        "table": "edoc_alf_new_data_loan__mnp",
+        "column": "loan_id",
+        "references": {
+          "table": "t24_ld_loans_and_depo__mnp",
+          "column": "loan_id"
+        }
+      },
+      {
+        "table": "TBL_LD",
+        "column": "customer_id",
+        "references": {
+          "table": "t24_customer__s2",
+          "column": "customer_id"
+        }
+      }
+    ]
+  }
+  

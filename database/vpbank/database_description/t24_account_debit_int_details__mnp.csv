@@ -1,0 +1,12 @@
+﻿Column,Column Description,Value Description,Type,Example Values
+account_no_date,,,TEXT,c1f46be7ce87e5b83e0a354208b2fc10
+m,,,TEXT,"c4ca4238a0b923820dcc509a6f75849b, c81e728d9d4c2f636f067f89cc14862c, eccbc87e4b5ce2fe28308fd9f2a7baf3"
+s,,,TEXT,c4ca4238a0b923820dcc509a6f75849b
+dr_int_rate,,,TEXT,"1634308a322d4d527215584626eaa7b7, 1587a314e8b65e9f30783e01f3f61904, ddf7bb80c0c409023cb9437fc5652a68"
+inputter,,,TEXT,3d4c04c95b560f2d5baea352de6e3fa5
+date_time,,,TEXT,f8f80c089e2b577dbeb4acbae1d203a1
+co_code,,,TEXT,3caf3ef385501284a209579fdbc3721b
+dr_limit_amt,,,TEXT,"1929ec3ec4f38a6fff719739d94a77de, 565686bb526a9355772ace9b66f3b66c, 1f2ad7048d4364563b9c042f3d470d69"
+tf_sourcing_at,,,TIMESTAMP,2024-10-24 00:00:00
+tf_etl_at,,,TIMESTAMP,2024-11-06 14:08:47
+tf_partition_date,,,TEXT,2024-10-24

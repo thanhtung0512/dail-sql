@@ -1,0 +1,38 @@
+﻿Column,Column Description,Value Description,Type,Example Values
+id,,,TEXT,"c4ca4238a0b923820dcc509a6f75849b, c81e728d9d4c2f636f067f89cc14862c, eccbc87e4b5ce2fe28308fd9f2a7baf3"
+producer_code,,,TEXT,"81be6742e1ee2b80637a7f1a6a54ec89, c470ab4cd873473f621b7e2ec7b4e3fb, f4ef6244074e554029637cbdd81586c8"
+producer_name,,,TEXT,"d1613c799b72096c112600abbb78513e, 9ffcfbeb75bc6bb35fbbf19aa9dedbde, 5d28e4a140ec5eff78f84cefb2df3355"
+dao_code,,,TEXT,"728f206c2a01bf572b5940d7d9a8fa4c, 8e065119c74efe3a47aec8796964cf8b, 89265e7911d89be01a4a8d80871b9768"
+birthday,,,TEXT,"005a3357c9555180b9f917bb6eac1eb7, 0aff7af85e68103a332086a2c1b12ac8, e9cfc73d181be36ed7362b3970ef8223"
+idno,,,TEXT,"3201f5380d4a85360b78fedbaa249033, 26eb38423ac0c09d329d8344a56744fb, 4fb7f3aa675262b9996c95cb481b009a"
+mobile,,,TEXT,"b457180d8db2a243dbe441ccedd601c4, 60c54b7cabc45562cb40ba03ac8c9a37, 4aa317dc7b4dedba33e9c71843f3f649"
+email,,,TEXT,"5e1540fd077ef7ecab9c60ff146e986e, 54682f22924ec78a2b3d442706cb1a87, 8506671a7b8aebb42a2ff1358664225d"
+email_bancas,,,TEXT,
+bank_agent_type,,,TEXT,72eb2e23da276b36abfb014652cdd405
+bank_role,,,TEXT,"f6587589a3be009c2a7fdf4860b4e818, e8280907c8d32d5af0f36e5442e84a34"
+allow_sale,,,TEXT,8d9c307cb7f3c4a32822a51922d1ceaa
+bank_name,,,TEXT,2fd5145ca8b1862bf88c0e4e0283b66b
+sub_channel,,,TEXT,2df198d6cf1caf316f82eb8f73237a91
+region,,,TEXT,"6dccd61646ecd355ec982288b89e082b, 7f46cc9be08937bf1cde57bd5e11e11c, 9cdd115170b59f76e6368c8b8fc25dbb"
+branch_id,,,TEXT,"90794e3b050f815354e3e29e977a88ab, d2ed45a52bc0edfa11c2064e9edee8bf, 843a4d7fb5b1641b0bb8e3c2b2e75231"
+branch_codevn,,,TEXT,"d471f17dbed1738b137ca7f72528b15c, 60faaf35d78c4197d022267f5c6bb277, 11dde48ec553331c9a59fcc9c51a05ce"
+branch_name,,,TEXT,"57fe4184f7f3206f5c6772e76bcaa1ef, 32721121d993bdfb9784c15c6b5c6963, 6a003bb6ee08c3bdc3547b86ada35bc3"
+status,,,TEXT,"7fc56270e7a70fa81a5935b72eacbe29, b9ece18c950afbfa6b0fdbfa4ff731d3"
+first_contract_date,,,TEXT,"c7cc1fc1b7ae9c817d1d8fb9c6b9068b, 869d6ba0c10db57e8a4f3d66f0a40309, 7290ef3e1ebc3d3305b963f1ce15f938"
+terminate_date,,,TEXT,
+reinstate_date,,,TEXT,
+recruit_code,,,TEXT,"0782dd4f0b2d443fb90793c05c5a8a59, f20d6faaafbb2a00823acdb32e0c229b, a3afd230e8296e408d26a6a2e34b1551"
+recruit_name,,,TEXT,"e466bde574539f49b5e9e93d950b8108, 8d4537d75af1fa48984c005eb364af2a, a0ac5a1612be106cc228af7e1c7a959a"
+sm_code,,,TEXT,"3a5610762059bb950edf40d9e11a1d91, 0687b179dd4a1f0ca9c8cacf1c40fb64, a3afd230e8296e408d26a6a2e34b1551"
+sm_name,,,TEXT,"1b8cf4e5bd72fc29d7348153f11f34bb, d2cd50dc35f0c2bc3aa5339bbf3461fe, a0ac5a1612be106cc228af7e1c7a959a"
+rh_name,,,TEXT,"9d83ca122800557e3da2b13b51e3a170, b5b79426e9ee60c702123b915fb3948a, 79194977d99cc88065d2884113b1c78d"
+sd_name,,,TEXT,c00ed5a03ae33108159aa9461457737b
+reason_leave,,,TEXT,
+on_leave_from,,,TEXT,
+on_leave_to,,,TEXT,
+gender,,,TEXT,"800618943025315f869e4e1f09471012, 69691c7bdcc3ce6d5d8a1361f22d04ac"
+atc1_class,,,TEXT,"7d319aa67d37d9e91eef4c7319dfc700, 8fae9369069772dbe6ce9e9a1b45699b, 954e0184496990f737bce936f136504a"
+last_executed_time,,,TEXT,"22eea37b753df6ad71b133631cb84e1c, fbb3f40708afda835b29d14f3f98bb14"
+tf_sourcing_at,,,TIMESTAMP,2024-07-12 00:00:00
+tf_etl_at,,,TIMESTAMP,2024-07-12 19:13:39
+tf_partition_date,,,TEXT,2024-07-12

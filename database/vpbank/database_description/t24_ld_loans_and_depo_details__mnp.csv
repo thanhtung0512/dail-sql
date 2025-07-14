@@ -1,0 +1,5 @@
+﻿Column,Column Description,Value Description,Type,Example Values
+contract_no_,,,TEXT,"8c1ee88efaa832561ffe644f89043d29, b6d5957457955051a31c88508a0ad493, 906ed5492aa2dc380a3cbb27dfd7d50c"
+amount,,,INTEGER,"777438282, 872122526, 529816917"
+m,,,INTEGER,1
+s,,,INTEGER,1

@@ -1,0 +1,33 @@
+{
+    "args": {
+      "db_root_directory": "database/vpbank",
+      "DAIL_SQL": "database/vpbank/dev.json"
+    },
+    "questions": [
+      {
+        "question": "Số dư tài khoản của khách hàng Nguyễn Văn A là bao nhiêu?",
+        "evidence": "Số dư tài khoản = TBL_LD.balance",
+        "raw_question": "Số dư tài khoản của khách hàng Nguyễn Văn A là bao nhiêu?",
+        "prompt": "/* SQL Example */\n#reason: Truy vấn cần lấy số dư của khách hàng Nguyễn Văn A.\n#columns: TBL_LD.name, TBL_LD.balance\n#values: name = 'Nguyễn Văn A'\n#SQL-like: SELECT TBL_LD.balance WHERE TBL_LD.name = 'Nguyễn Văn A'\n#SQL: SELECT balance FROM TBL_LD WHERE name = 'Nguyễn Văn A';",
+        "n_examples": 1,
+        "db_id": "vpbank"
+      },
+      {
+        "question": "Liệt kê 5 khoản vay có lãi suất cao nhất.",
+        "evidence": "Khoản vay và lãi suất nằm ở bảng t24_ld_loans_and_depo__mnp",
+        "raw_question": "Liệt kê 5 khoản vay có lãi suất cao nhất.",
+        "prompt": "/* SQL Example */\n#reason: Truy vấn cần sắp xếp các khoản vay theo lãi suất giảm dần, lấy 5 khoản đầu.\n#columns: t24_ld_loans_and_depo__mnp.loan_id, t24_ld_loans_and_depo__mnp.interest_rate\n#SQL-like: SELECT loan_id, interest_rate ORDER BY interest_rate DESC LIMIT 5\n#SQL: SELECT loan_id, interest_rate FROM t24_ld_loans_and_depo__mnp ORDER BY interest_rate DESC LIMIT 5;",
+        "n_examples": 1,
+        "db_id": "vpbank"
+      },
+      {
+        "question": "Tổng số tiền gửi của khách hàng theo từng loại tài khoản.",
+        "evidence": "Sử dụng bảng t24_account_debit_int_details__mnp",
+        "raw_question": "Tổng số tiền gửi của khách hàng theo từng loại tài khoản.",
+        "prompt": "/* SQL Example */\n#reason: Truy vấn cần tính tổng số dư theo loại tài khoản.\n#columns: t24_account_debit_int_details__mnp.account_type, t24_account_debit_int_details__mnp.balance\n#SQL-like: SELECT account_type, SUM(balance) GROUP BY account_type\n#SQL: SELECT account_type, SUM(balance) FROM t24_account_debit_int_details__mnp GROUP BY account_type;",
+        "n_examples": 1,
+        "db_id": "vpbank"
+      }
+    ]
+  }
+  

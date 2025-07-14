@@ -1,0 +1,7 @@
+﻿Column,Column Description,Value Description,Type,Example Values
+contract_no_,,,TEXT,"aab55c85e7433cd0e7239e61030cc707, bb5e1ecc63d8da76752fa2260816a416, e3a08f1d802a106acd8e6f3b2be8eef7"
+customer_id,,,TEXT,"9b20d0112a3fe0454b2ea8100f3a9c29, d4d06422c725898808fcc96458af73d0, aab556bf1f9d103cde6837a88743300c"
+currency,,,TEXT,VND
+co_code,,,TEXT,VN0010102
+value_date,,,DATE,"2024-02-06, 2024-02-01"
+category,,,TEXT,21055

@@ -1,0 +1,977 @@
+[
+  {
+    "db_id": "vp_bank",
+    "question": "What columns are available in the customer table?",
+    "evidence": "User wants to understand the structure of the customer master data table",
+    "SQL": "PRAGMA table_info(t24_customer__s2);"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show me the structure  and meaning of columns in the loan and deposit table",
+    "evidence": "User needs to understand what information is stored in the loan contracts table",
+    "SQL": "PRAGMA table_info(t24_ld_loans_and_depo__mnp);"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "What fields are available in the statement entry table?",
+    "evidence": "User wants to explore transaction data structure",
+    "SQL": "PRAGMA table_info(t24_stmt_entry__fa);"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Describe the TBL_LD table structure",
+    "evidence": "User needs to understand the aggregated loan debt summary table",
+    "SQL": "PRAGMA table_info(TBL_LD);"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "What information is stored in the insurance agent table?",
+    "evidence": "User wants to understand agent-related data structure",
+    "SQL": "PRAGMA table_info(banca_aia_agent_info__mnp);"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show all customers in the private segment",
+    "evidence": "VIP customers require special attention and personalized services",
+    "SQL": "SELECT customer_code, segment FROM t24_customer__s2 WHERE segment = 'private';"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List all customer segments available in the database",
+    "evidence": "Understanding customer segmentation helps in targeted marketing and service delivery",
+    "SQL": "SELECT DISTINCT segment FROM t24_customer__s2 ORDER BY segment;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "How many customers are in each segment?",
+    "evidence": "Customer distribution by segment helps in resource allocation and strategy planning",
+    "SQL": "SELECT segment, COUNT(*) as customer_count FROM t24_customer__s2 GROUP BY segment ORDER BY customer_count DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find customers who have multiple loan contracts",
+    "evidence": "Customers with multiple contracts may need relationship manager attention",
+    "SQL": "SELECT c.customer_code, c.segment, COUNT(l.contract_no_) as contract_count FROM t24_customer__s2 c JOIN t24_ld_loans_and_depo__mnp l ON c.customer_code = l.customer_id GROUP BY c.customer_code, c.segment HAVING COUNT(l.contract_no_) > 1;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show customers with their total debt amount from TBL_LD",
+    "evidence": "Understanding customer debt exposure is crucial for risk management",
+    "SQL": "SELECT customer_id, segment, SUM(total_stmt_amt_lcy) as total_debt FROM TBL_LD GROUP BY customer_id, segment ORDER BY total_debt DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List customers by segment with their contract counts",
+    "evidence": "Analyzing customer engagement by segment helps in product development",
+    "SQL": "SELECT c.segment, COUNT(DISTINCT c.customer_code) as customers, COUNT(l.contract_no_) as total_contracts FROM t24_customer__s2 c LEFT JOIN t24_ld_loans_and_depo__mnp l ON c.customer_code = l.customer_id GROUP BY c.segment;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show customer distribution across different currency types",
+    "evidence": "Currency exposure analysis helps in foreign exchange risk management",
+    "SQL": "SELECT c.segment, l.currency, COUNT(*) as contract_count FROM t24_customer__s2 c JOIN t24_ld_loans_and_depo__mnp l ON c.customer_code = l.customer_id GROUP BY c.segment, l.currency ORDER BY c.segment, contract_count DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "What is the total outstanding debt amount by customer segment?",
+    "evidence": "Segment-wise debt analysis helps in portfolio risk assessment and pricing strategies",
+    "SQL": "SELECT segment, SUM(total_stmt_amt_lcy) as total_debt, COUNT(DISTINCT customer_id) as customer_count FROM TBL_LD GROUP BY segment ORDER BY total_debt DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show the top 10 customers with highest debt amounts",
+    "evidence": "High-debt customers require special monitoring for credit risk management",
+    "SQL": "SELECT customer_id, segment, SUM(total_stmt_amt_lcy) as total_debt FROM TBL_LD GROUP BY customer_id, segment ORDER BY total_debt DESC LIMIT 10;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find all loan contracts with their customer segments",
+    "evidence": "Linking loan data with customer segments enables better risk assessment",
+    "SQL": "SELECT l.contract_no_, l.customer_id, c.segment, l.currency, l.value_date FROM t24_ld_loans_and_depo__mnp l JOIN t24_customer__s2 c ON l.customer_id = c.customer_code;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Calculate average debt amount per customer by segment",
+    "evidence": "Average debt analysis helps in understanding customer behavior and setting credit limits",
+    "SQL": "SELECT segment, AVG(total_stmt_amt_lcy) as avg_debt, COUNT(DISTINCT customer_id) as customer_count FROM TBL_LD GROUP BY segment ORDER BY avg_debt DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show debt distribution by currency and segment",
+    "evidence": "Currency and segment analysis helps in foreign exchange and credit risk management",
+    "SQL": "SELECT t.segment, t.currency, SUM(t.total_stmt_amt_lcy) as total_debt, COUNT(*) as record_count FROM TBL_LD t GROUP BY t.segment, t.currency ORDER BY t.segment, total_debt DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find customers with debt amounts above 1 billion VND",
+    "evidence": "High-value debt customers require enhanced monitoring and relationship management",
+    "SQL": "SELECT customer_id, segment, SUM(total_stmt_amt_lcy) as total_debt FROM TBL_LD GROUP BY customer_id, segment HAVING SUM(total_stmt_amt_lcy) > 1000000000 ORDER BY total_debt DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show loan contracts by category and customer segment",
+    "evidence": "Product category analysis by segment helps in product development and marketing",
+    "SQL": "SELECT c.segment, l.category, COUNT(*) as contract_count FROM t24_customer__s2 c JOIN t24_ld_loans_and_depo__mnp l ON c.customer_code = l.customer_id GROUP BY c.segment, l.category ORDER BY c.segment, contract_count DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Calculate debt concentration by company code",
+    "evidence": "Branch-wise debt concentration helps in portfolio management and risk distribution",
+    "SQL": "SELECT co_code, SUM(total_stmt_amt_lcy) as total_debt, COUNT(DISTINCT customer_id) as customer_count FROM TBL_LD GROUP BY co_code ORDER BY total_debt DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show customers with contracts in multiple currencies",
+    "evidence": "Multi-currency customers have complex foreign exchange exposure",
+    "SQL": "SELECT customer_id, COUNT(DISTINCT currency) as currency_count, GROUP_CONCAT(DISTINCT currency) as currencies FROM t24_ld_loans_and_depo__mnp GROUP BY customer_id HAVING COUNT(DISTINCT currency) > 1;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find the oldest and newest loan contracts",
+    "evidence": "Understanding contract age distribution helps in portfolio maturity analysis",
+    "SQL": "SELECT MIN(value_date) as oldest_contract, MAX(value_date) as newest_contract FROM t24_ld_loans_and_depo__mnp;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show debt trends by year from TBL_LD",
+    "evidence": "Yearly debt trends indicate business growth and risk patterns",
+    "SQL": "SELECT year, SUM(total_stmt_amt_lcy) as total_debt, COUNT(DISTINCT customer_id) as unique_customers FROM TBL_LD GROUP BY year ORDER BY year;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Calculate total transaction amount by month from statement entries",
+    "evidence": "Monthly transaction volumes help in cash flow planning and business trend analysis",
+    "SQL": "SELECT year, month, SUM(amt_lcy) as total_amount, COUNT(*) as transaction_count FROM t24_stmt_entry__fa GROUP BY year, month ORDER BY year, month;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find the largest transactions in the statement entries",
+    "evidence": "Large transactions may require special attention for compliance and risk monitoring",
+    "SQL": "SELECT stmt_entry_id, transaction_code, our_reference, amt_lcy, booking_date FROM t24_stmt_entry__fa ORDER BY amt_lcy DESC LIMIT 10;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show transaction patterns by transaction code",
+    "evidence": "Transaction code analysis helps understand customer behavior and product usage",
+    "SQL": "SELECT transaction_code, COUNT(*) as transaction_count, SUM(amt_lcy) as total_amount, AVG(amt_lcy) as avg_amount FROM t24_stmt_entry__fa GROUP BY transaction_code ORDER BY transaction_count DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Calculate daily transaction volumes for the current year",
+    "evidence": "Daily transaction analysis helps in operational planning and liquidity management",
+    "SQL": "SELECT year, month, day, SUM(amt_lcy) as daily_volume, COUNT(*) as transaction_count FROM t24_stmt_entry__fa WHERE year = 2024 GROUP BY year, month, day ORDER BY year, month, day;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find transactions above average amount",
+    "evidence": "Above-average transactions may indicate high-value customers or unusual activity",
+    "SQL": "SELECT stmt_entry_id, transaction_code, amt_lcy, booking_date FROM t24_stmt_entry__fa WHERE amt_lcy > (SELECT AVG(amt_lcy) FROM t24_stmt_entry__fa) ORDER BY amt_lcy DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show monthly transaction trends by year",
+    "evidence": "Seasonal patterns in transactions help in resource planning and forecasting",
+    "SQL": "SELECT year, month, SUM(amt_lcy) as monthly_volume, COUNT(*) as transaction_count FROM t24_stmt_entry__fa GROUP BY year, month ORDER BY year, month;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Calculate transaction statistics by booking date",
+    "evidence": "Transaction timing analysis helps in operational efficiency and customer service optimization",
+    "SQL": "SELECT booking_date, COUNT(*) as transaction_count, SUM(amt_lcy) as total_amount, MIN(amt_lcy) as min_amount, MAX(amt_lcy) as max_amount FROM t24_stmt_entry__fa GROUP BY booking_date ORDER BY booking_date DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find unique transaction codes and their descriptions",
+    "evidence": "Understanding transaction types helps in product analysis and customer service",
+    "SQL": "SELECT DISTINCT transaction_code, COUNT(*) as usage_count FROM t24_stmt_entry__fa GROUP BY transaction_code ORDER BY usage_count DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List all insurance agents by region",
+    "evidence": "Regional agent distribution helps in sales territory management and performance analysis",
+    "SQL": "SELECT region, COUNT(*) as agent_count, COUNT(CASE WHEN status = 'Active' THEN 1 END) as active_agents FROM banca_aia_agent_info__mnp GROUP BY region ORDER BY agent_count DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show agent performance by branch",
+    "evidence": "Branch-wise agent performance helps in resource allocation and training needs assessment",
+    "SQL": "SELECT branch_name, COUNT(*) as total_agents, COUNT(CASE WHEN allow_sale = 'Y' THEN 1 END) as selling_agents FROM banca_aia_agent_info__mnp GROUP BY branch_name ORDER BY total_agents DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find active insurance agents with sales permission",
+    "evidence": "Active selling agents are key revenue generators for bancassurance products",
+    "SQL": "SELECT producer_code, producer_name, branch_name, region, bank_agent_type FROM banca_aia_agent_info__mnp WHERE status = 'Active' AND allow_sale = 'Y';"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Calculate agent distribution by bank agent type",
+    "evidence": "Agent type classification helps in role management and commission structure design",
+    "SQL": "SELECT bank_agent_type, COUNT(*) as agent_count, COUNT(CASE WHEN status = 'Active' THEN 1 END) as active_count FROM banca_aia_agent_info__mnp GROUP BY bank_agent_type;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show company code distribution in loan contracts",
+    "evidence": "Company code analysis helps understand business distribution across branches",
+    "SQL": "SELECT co_code, COUNT(*) as contract_count, COUNT(DISTINCT customer_id) as unique_customers FROM t24_ld_loans_and_depo__mnp GROUP BY co_code ORDER BY contract_count DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find agents recruited in the last year",
+    "evidence": "Recent recruitment tracking helps in onboarding effectiveness and retention analysis",
+    "SQL": "SELECT producer_code, producer_name, first_contract_date, recruit_name, branch_name FROM banca_aia_agent_info__mnp WHERE first_contract_date >= date('now', '-1 year');"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show loan application status distribution",
+    "evidence": "Application status tracking helps in process efficiency and approval rate analysis",
+    "SQL": "SELECT ld_confirm, COUNT(*) as application_count FROM edoc_alf_new_data_loan__mnp GROUP BY ld_confirm;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Compare debt amounts year-over-year by segment",
+    "evidence": "Yearly growth comparison helps in business trend analysis and strategic planning",
+    "SQL": "SELECT segment, year, SUM(total_stmt_amt_lcy) as yearly_debt FROM TBL_LD GROUP BY segment, year ORDER BY segment, year;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Calculate monthly debt collection trends",
+    "evidence": "Monthly collection patterns help in cash flow forecasting and collection strategy",
+    "SQL": "SELECT year, month, SUM(total_stmt_amt_lcy) as monthly_debt, COUNT(DISTINCT customer_id) as customers FROM TBL_LD GROUP BY year, month ORDER BY year, month;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show seasonal transaction patterns by quarter",
+    "evidence": "Quarterly patterns help identify business cycles and plan for seasonal variations",
+    "SQL": "SELECT year, CASE WHEN month IN (1,2,3) THEN 'Q1' WHEN month IN (4,5,6) THEN 'Q2' WHEN month IN (7,8,9) THEN 'Q3' ELSE 'Q4' END as quarter, SUM(amt_lcy) as quarterly_volume FROM t24_stmt_entry__fa GROUP BY year, quarter ORDER BY year, quarter;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Calculate quarterly growth rates in loan portfolio",
+    "evidence": "Growth rate analysis helps measure business expansion and market performance",
+    "SQL": "SELECT year, CASE WHEN month IN (1,2,3) THEN 'Q1' WHEN month IN (4,5,6) THEN 'Q2' WHEN month IN (7,8,9) THEN 'Q3' ELSE 'Q4' END as quarter, SUM(total_stmt_amt_lcy) as quarterly_debt FROM TBL_LD GROUP BY year, quarter ORDER BY year, quarter;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find peak transaction months across all years",
+    "evidence": "Peak period identification helps in capacity planning and resource allocation",
+    "SQL": "SELECT month, AVG(monthly_total) as avg_monthly_volume FROM (SELECT year, month, SUM(amt_lcy) as monthly_total FROM t24_stmt_entry__fa GROUP BY year, month) GROUP BY month ORDER BY avg_monthly_volume DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show debt concentration by customer and time period",
+    "evidence": "Customer debt trends over time help in relationship management and risk monitoring",
+    "SQL": "SELECT customer_id, year, month, SUM(total_stmt_amt_lcy) as monthly_debt FROM TBL_LD GROUP BY customer_id, year, month HAVING SUM(total_stmt_amt_lcy) > 100000000 ORDER BY monthly_debt DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Rank customers by total debt amount with their segment information",
+    "evidence": "Customer ranking helps identify key accounts and high-risk exposures for portfolio management",
+    "SQL": "SELECT customer_id, segment, SUM(total_stmt_amt_lcy) as total_debt, ROW_NUMBER() OVER (ORDER BY SUM(total_stmt_amt_lcy) DESC) as debt_rank FROM TBL_LD GROUP BY customer_id, segment ORDER BY total_debt DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find top performing branches by total loan portfolio size",
+    "evidence": "Branch performance ranking helps in resource allocation and best practice identification",
+    "SQL": "WITH branch_portfolio AS (SELECT co_code, SUM(total_stmt_amt_lcy) as portfolio_size, COUNT(DISTINCT customer_id) as customer_count FROM TBL_LD GROUP BY co_code) SELECT co_code, portfolio_size, customer_count, RANK() OVER (ORDER BY portfolio_size DESC) as branch_rank FROM branch_portfolio ORDER BY portfolio_size DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Calculate customer lifetime value by segment with transaction history",
+    "evidence": "Customer lifetime value analysis helps in relationship prioritization and service customization",
+    "SQL": "SELECT c.segment, COUNT(DISTINCT c.customer_code) as customers, SUM(t.total_stmt_amt_lcy) as total_debt_value, AVG(t.total_stmt_amt_lcy) as avg_customer_value FROM t24_customer__s2 c JOIN TBL_LD t ON c.customer_code = t.customer_id GROUP BY c.segment ORDER BY total_debt_value DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Identify customers with declining transaction patterns over time",
+    "evidence": "Declining transaction patterns may indicate customer churn risk or changing business needs",
+    "SQL": "WITH monthly_transactions AS (SELECT customer_id, year, month, SUM(total_stmt_amt_lcy) as monthly_amount FROM TBL_LD GROUP BY customer_id, year, month), customer_trends AS (SELECT customer_id, COUNT(*) as months_active, MIN(monthly_amount) as min_monthly, MAX(monthly_amount) as max_monthly, AVG(monthly_amount) as avg_monthly FROM monthly_transactions GROUP BY customer_id) SELECT customer_id, months_active, avg_monthly, max_monthly - min_monthly as amount_range FROM customer_trends WHERE months_active >= 6 ORDER BY avg_monthly DESC;"
+  },
+
+  {
+    "db_id": "vp_bank",
+    "question": "Find customers who have more than 3 loan contracts",
+    "evidence": "Customers with many loan contracts may require closer relationship management",
+    "SQL": "SELECT c.customer_code, c.segment, COUNT(l.contract_no_) AS num_contracts FROM t24_customer__s2 c JOIN t24_ld_loans_and_depo__mnp l ON c.customer_code = l.customer_id GROUP BY c.customer_code, c.segment HAVING COUNT(l.contract_no_) > 3;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Get the total debt amount for each customer segment",
+    "evidence": "Understanding debt distribution across segments helps define strategic lending policies",
+    "SQL": "SELECT segment, SUM(total_stmt_amt_lcy) AS total_debt FROM TBL_LD GROUP BY segment ORDER BY total_debt DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Retrieve top 5 customers with highest transaction amounts this month",
+    "evidence": "Identifying high transaction customers helps in offering tailored investment products",
+    "SQL": "SELECT our_reference, amt_lcy, booking_date FROM t24_stmt_entry__fa WHERE strftime('%m', booking_date) = strftime('%m', 'now') ORDER BY amt_lcy DESC LIMIT 5;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List customers who have both loan and deposit contracts",
+    "evidence": "These customers may be suitable for bundled financial products",
+    "SQL": "SELECT DISTINCT c.customer_code, c.segment FROM t24_customer__s2 c JOIN t24_ld_loans_and_depo__mnp l ON c.customer_code = l.customer_id WHERE l.category IN ('LOAN', 'DEPOSIT');"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show average overdue amount by loan product type",
+    "evidence": "Understanding product-specific default risk aids product design and pricing",
+    "SQL": "SELECT loan_product, AVG(total_amount_overdue) AS avg_overdue FROM edoc_alf_new_data_loan__mnp GROUP BY loan_product;"
+  },
+    {
+    "db_id": "vp_bank",
+    "question": "List loan applications with overdue more than 90 days",
+    "evidence": "Overdue loans beyond 90 days are considered high credit risk",
+    "SQL": "SELECT ld_code, out_of_date FROM edoc_alf_new_data_loan__mnp WHERE out_of_date > 90;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show top 5 loan applications with the highest total overdue amount",
+    "evidence": "High overdue values indicate significant exposure",
+    "SQL": "SELECT ld_code, total_amount_overdue FROM edoc_alf_new_data_loan__mnp ORDER BY total_amount_overdue DESC LIMIT 5;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find loan applications where total overdue amount is above 5 million and repayment is not proposed",
+    "evidence": "These loans may default without proactive resolution",
+    "SQL": "SELECT ld_code, total_amount_overdue FROM edoc_alf_new_data_loan__mnp WHERE total_amount_overdue > 5000000 AND amount_proposed_to_repay IS NULL;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Get average overdue days grouped by loan product",
+    "evidence": "Identifies products with consistently delayed repayments",
+    "SQL": "SELECT loan_product, AVG(out_of_date) AS avg_overdue_days FROM edoc_alf_new_data_loan__mnp WHERE out_of_date IS NOT NULL GROUP BY loan_product;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find loans that are confirmed and currently overdue",
+    "evidence": "Confirmed loans with overdue issues may require urgent intervention",
+    "SQL": "SELECT ld_code, total_amount_overdue FROM edoc_alf_new_data_loan__mnp WHERE ld_confirm = 'YES' AND total_amount_overdue > 0;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show number of overdue loans per reason of debt collection",
+    "evidence": "Analyzing reasons helps adjust credit policies and scoring",
+    "SQL": "SELECT reasons_for_debt_collect, COUNT(*) AS overdue_count FROM edoc_alf_new_data_loan__mnp WHERE total_amount_overdue > 0 GROUP BY reasons_for_debt_collect;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List loan codes with overdue amount higher than proposed repayment amount",
+    "evidence": "Proposed plans may be insufficient for recovery",
+    "SQL": "SELECT ld_code, total_amount_overdue, amount_proposed_to_repay FROM edoc_alf_new_data_loan__mnp WHERE amount_proposed_to_repay IS NOT NULL AND amount_proposed_to_repay < total_amount_overdue;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Get count of loans that are overdue and have early repayment fee applied",
+    "evidence": "These loans may involve higher loss given default",
+    "SQL": "SELECT COUNT(*) AS risky_loans FROM edoc_alf_new_data_loan__mnp WHERE total_amount_overdue > 0 AND early_repayment_fee > 0;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show total amount overdue per loan product",
+    "evidence": "To identify high-risk product categories",
+    "SQL": "SELECT loan_product, SUM(total_amount_overdue) AS total_overdue FROM edoc_alf_new_data_loan__mnp GROUP BY loan_product ORDER BY total_overdue DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find loans with overdue status but current interest still applied",
+    "evidence": "May indicate accumulating interest on defaulted loans",
+    "SQL": "SELECT ld_code, current_interest, total_amount_overdue FROM edoc_alf_new_data_loan__mnp WHERE total_amount_overdue > 0 AND current_interest > 0;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Get the number of overdue loans grouped by repayment method",
+    "evidence": "Helps evaluate effectiveness of each repayment approach",
+    "SQL": "SELECT debt_payment_method, COUNT(*) AS num_overdue FROM edoc_alf_new_data_loan__mnp WHERE total_amount_overdue > 0 GROUP BY debt_payment_method;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find customers with overdue amounts above 5 million but no repayment proposed",
+    "evidence": "Indicates potential default risk and lack of resolution plan",
+    "SQL": "SELECT customer_id, total_amount_overdue FROM edoc_alf_new_data_loan__mnp WHERE total_amount_overdue > 5000000 AND amount_proposed_to_repay IS NULL;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Get average overdue days by loan product",
+    "evidence": "Supports analysis of which products are more prone to delayed payments",
+    "SQL": "SELECT loan_product, AVG(out_of_date) AS avg_delay FROM edoc_alf_new_data_loan__mnp WHERE out_of_date IS NOT NULL GROUP BY loan_product;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show confirmed loans that are overdue and have early repayment fees",
+    "evidence": "Helps identify costly overdue loans with penalty impact",
+    "SQL": "SELECT ld_code, current_outstanding_balance, early_repayment_fee FROM edoc_alf_new_data_loan__mnp WHERE ld_confirm = 'YES' AND total_amount_overdue > 0 AND early_repayment_fee > 0;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find loan applications with both overdue and early repayment fee marked as 'QD'",
+    "evidence": "Useful for compliance and pricing policy review",
+    "SQL": "SELECT ld_code, total_amount_overdue, early_repayment_fee_qd FROM edoc_alf_new_data_loan__mnp WHERE total_amount_overdue > 0 AND early_repayment_fee_qd > 0;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find the top 10 transactions with the highest local currency amount",
+    "evidence": "Identifying large transactions helps detect unusual or high-value activity",
+    "SQL": "SELECT stmt_entry_id, our_reference, amt_lcy, booking_date FROM t24_stmt_entry__fa ORDER BY amt_lcy DESC LIMIT 10;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show the number of transactions per day in the current month",
+    "evidence": "Used to analyze daily transaction volume trends",
+    "SQL": "SELECT booking_date, COUNT(*) AS transaction_count FROM t24_stmt_entry__fa WHERE strftime('%m', booking_date) = strftime('%m', 'now') GROUP BY booking_date ORDER BY booking_date;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Get the total transaction amount in local currency by transaction code",
+    "evidence": "Summarizing by transaction type helps understand usage patterns",
+    "SQL": "SELECT transaction_code, SUM(amt_lcy) AS total_amount FROM t24_stmt_entry__fa GROUP BY transaction_code ORDER BY total_amount DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find the average transaction amount for each day in the past week",
+    "evidence": "Used to monitor average daily activity for short-term trends",
+    "SQL": "SELECT booking_date, AVG(amt_lcy) AS avg_transaction_amount FROM t24_stmt_entry__fa WHERE booking_date >= date('now', '-7 days') GROUP BY booking_date ORDER BY booking_date;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show transaction codes with more than 100 transactions this month",
+    "evidence": "High-frequency transaction codes may indicate automation or bulk operations",
+    "SQL": "SELECT transaction_code, COUNT(*) AS txn_count FROM t24_stmt_entry__fa WHERE strftime('%m', booking_date) = strftime('%m', 'now')   AND strftime('%Y', booking_date) = strftime('%Y', 'now') GROUP BY transaction_code HAVING COUNT(*) > 100;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List transactions that occurred on weekends",
+    "evidence": "Used to detect off-hour banking behavior or system-generated entries",
+    "SQL": "SELECT stmt_entry_id, booking_date, amt_lcy FROM t24_stmt_entry__fa WHERE strftime('%w', booking_date) IN ('0', '6');"
+  },
+
+  {
+    "db_id": "vp_bank",
+    "question": "Calculate monthly total transaction amount for the current year",
+    "evidence": "Monthly aggregation helps in identifying seasonal trends or anomalies",
+    "SQL": "SELECT strftime('%m', booking_date) AS month, SUM(amt_lcy) AS monthly_total FROM t24_stmt_entry__fa WHERE strftime('%Y', booking_date) = strftime('%Y', 'now') GROUP BY month ORDER BY month;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find the earliest and latest transaction dates in the system",
+    "evidence": "Helps understand the system's data coverage range",
+    "SQL": "SELECT MIN(booking_date) AS earliest, MAX(booking_date) AS latest FROM t24_stmt_entry__fa;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Identify transactions above 100 million VND in the last 30 days",
+    "evidence": "Large transactions are monitored for compliance and risk",
+    "SQL": "SELECT stmt_entry_id, our_reference, amt_lcy, booking_date FROM t24_stmt_entry__fa WHERE booking_date >= date('now', '-30 days') AND amt_lcy > 100000000;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Count number of unique transaction codes used in the last 3 months",
+    "evidence": "Helps in tracking operational transaction diversity",
+    "SQL": "SELECT COUNT(DISTINCT transaction_code) AS unique_txn_codes FROM t24_stmt_entry__fa WHERE booking_date >= date('now', '-3 months');"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List the total outstanding loan balance by loan product",
+    "evidence": "Used to evaluate which loan products have the highest exposure",
+    "SQL": "SELECT loan_product, SUM(current_outstanding_balance) AS total_outstanding FROM edoc_alf_new_data_loan__mnp GROUP BY loan_product ORDER BY total_outstanding DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find the average early repayment fee for each loan product",
+    "evidence": "Helps assess financial impact of prepayment on different products",
+    "SQL": "SELECT loan_product, AVG(early_repayment_fee) AS avg_fee FROM edoc_alf_new_data_loan__mnp GROUP BY loan_product;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Get total amount due for collection per loan product",
+    "evidence": "Supports analysis of collection performance by product line",
+    "SQL": "SELECT loan_product, SUM(total_amount_due_coll) AS total_due FROM edoc_alf_new_data_loan__mnp GROUP BY loan_product ORDER BY total_due DESC;"
+  }, 
+  
+  {
+    "db_id": "vp_bank",
+    "question": "Show number of active loan contracts by loan product",
+    "evidence": "Used to measure product adoption and loan portfolio size",
+    "SQL": "SELECT loan_product, COUNT(*) AS num_contracts FROM edoc_alf_new_data_loan__mnp WHERE current_outstanding_balance > 0 GROUP BY loan_product ORDER BY num_contracts DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find total overdue loan amount grouped by loan product",
+    "evidence": "Identifies which loan products are contributing most to delinquency",
+    "SQL": "SELECT loan_product, SUM(total_amount_overdue) AS total_overdue FROM edoc_alf_new_data_loan__mnp GROUP BY loan_product ORDER BY total_overdue DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show average interest rate per loan product",
+    "evidence": "Provides insight into product pricing and revenue potential",
+    "SQL": "SELECT loan_product, AVG(current_interest) AS avg_interest FROM edoc_alf_new_data_loan__mnp GROUP BY loan_product;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Rank loan products by total confirmed disbursed value",
+    "evidence": "Important for evaluating actual utilization vs. approval",
+    "SQL": "SELECT loan_product, COUNT(*) AS confirmed_loans FROM edoc_alf_new_data_loan__mnp WHERE ld_confirm = 'YES' GROUP BY loan_product ORDER BY confirmed_loans DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Get average proposed repayment amount by loan product",
+    "evidence": "Helps assess borrower capacity and repayment behavior",
+    "SQL": "SELECT loan_product, AVG(amount_proposed_to_repay) AS avg_proposed FROM edoc_alf_new_data_loan__mnp WHERE amount_proposed_to_repay IS NOT NULL GROUP BY loan_product;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show total statement debt amount by year and loan product",
+    "evidence": "Yearly trends support long-term strategic planning",
+    "SQL": "SELECT year, loan_product, SUM(total_stmt_amt_lcy) AS yearly_total FROM TBL_LD GROUP BY year, loan_product ORDER BY year, yearly_total DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find loan products with average overdue period above 60 days",
+    "evidence": "Products with long overdue durations may need reevaluation",
+    "SQL": "SELECT loan_product, AVG(out_of_date) AS avg_overdue FROM edoc_alf_new_data_loan__mnp WHERE out_of_date IS NOT NULL GROUP BY loan_product HAVING AVG(out_of_date) > 60;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find customers with more than 3 loan or deposit contracts",
+    "evidence": "Multiple contracts may indicate high engagement or cross-sell potential",
+    "SQL": "SELECT customer_id, COUNT(contract_no_) AS contract_count FROM t24_ld_loans_and_depo__mnp GROUP BY customer_id HAVING COUNT(contract_no_) > 3;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List customers whose total debt is below 5 million VND",
+    "evidence": "Low debt customers may be targeted for up-sell",
+    "SQL": "SELECT customer_id, SUM(total_stmt_amt_lcy) AS total_debt FROM TBL_LD GROUP BY customer_id HAVING SUM(total_stmt_amt_lcy) < 5000000;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show customer segments with average debt amount above 100 million VND",
+    "evidence": "Used to identify high-value segments for special offers",
+    "SQL": "SELECT segment, AVG(total_stmt_amt_lcy) AS avg_debt FROM TBL_LD GROUP BY segment HAVING AVG(total_stmt_amt_lcy) > 100000000;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find customers with overdue loans and no early repayment activity",
+    "evidence": "Could be passive or disengaged customers",
+    "SQL": "SELECT customer_id FROM edoc_alf_new_data_loan__mnp WHERE total_amount_overdue > 0 AND early_repayment_fee = 0 GROUP BY customer_id;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Identify customers with frequent large-value transactions",
+    "evidence": "Indicates high banking activity and product suitability",
+    "SQL": "SELECT our_reference, COUNT(*) AS txn_count FROM t24_stmt_entry__fa WHERE amt_lcy > 100000000 GROUP BY our_reference HAVING COUNT(*) > 5;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Get average number of contracts per customer by segment",
+    "evidence": "Used to assess product penetration in each segment",
+    "SQL": "SELECT c.segment, AVG(sub.contract_count) AS avg_contracts FROM t24_customer__s2 c JOIN (SELECT customer_id, COUNT(*) AS contract_count FROM t24_ld_loans_and_depo__mnp GROUP BY customer_id) sub ON c.customer_code = sub.customer_id GROUP BY c.segment;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Count number of active insurance agents per region",
+    "evidence": "Used to allocate sales support and regional resources",
+    "SQL": "SELECT region, COUNT(*) AS active_agents FROM banca_aia_agent_info__mnp WHERE status = 'ACTIVE' GROUP BY region;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List branch names with the highest number of active bancassurance agents",
+    "evidence": "Branches with high agent count may require dedicated support",
+    "SQL": "SELECT branch_name, COUNT(*) AS num_agents FROM banca_aia_agent_info__mnp WHERE status = 'ACTIVE' GROUP BY branch_name ORDER BY num_agents DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find number of agents whose first contract started in 2024 by branch",
+    "evidence": "New agent activity can indicate recent recruitment push",
+    "SQL": "SELECT branch_name, COUNT(*) AS new_agents_2024 FROM banca_aia_agent_info__mnp WHERE EXTRACT(YEAR FROM first_contract_date) = 2024 GROUP BY branch_name;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show branches with the highest number of agents on leave",
+    "evidence": "Helps manage capacity and agent availability per branch",
+    "SQL": "SELECT branch_name, COUNT(*) AS on_leave_count FROM banca_aia_agent_info__mnp WHERE on_leave_from IS NOT NULL GROUP BY branch_name ORDER BY on_leave_count DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List regions with more than 10 terminated bancassurance agents",
+    "evidence": "Unusual agent churn in a region may require investigation",
+    "SQL": "SELECT region, COUNT(*) AS terminated_count FROM banca_aia_agent_info__mnp WHERE terminate_date IS NOT NULL GROUP BY region HAVING COUNT(*) > 10;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Count number of agents by bank_role in each region",
+    "evidence": "Supports planning of role-based resource allocation",
+    "SQL": "SELECT region, bank_role, COUNT(*) AS num_agents FROM banca_aia_agent_info__mnp GROUP BY region, bank_role;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List branches with agents having the longest tenure (earliest contract dates)",
+    "evidence": "Experienced agents can be leveraged for mentoring and training",
+    "SQL": "SELECT branch_name, MIN(first_contract_date) AS earliest_start FROM banca_aia_agent_info__mnp GROUP BY branch_name ORDER BY earliest_start ASC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find number of bancassurance agents by gender and region",
+    "evidence": "Used for gender diversity and compliance reporting",
+    "SQL": "SELECT region, gender, COUNT(*) AS agent_count FROM banca_aia_agent_info__mnp GROUP BY region, gender;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show average number of agents per branch in each region",
+    "evidence": "Helps compare branch-level staffing across regions",
+    "SQL": "SELECT region, COUNT(*) / COUNT(DISTINCT branch_name) AS avg_agents_per_branch FROM banca_aia_agent_info__mnp GROUP BY region;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List agents who returned from leave in the last 30 days",
+    "evidence": "Important for scheduling and operational readiness",
+    "SQL": "SELECT producer_code, producer_name, branch_name, on_leave_to FROM banca_aia_agent_info__mnp WHERE on_leave_to >= date('now', '-30 days');"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find total number of loans currently in debt collection process",
+    "evidence": "Identifying active debt collection helps prioritize recovery operations",
+    "SQL": "SELECT COUNT(*) AS num_in_collection FROM edoc_alf_new_data_loan__mnp WHERE debt_collection_account IS NOT NULL;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Get the top 5 loan contracts with the highest overdue amount",
+    "evidence": "Prioritizing highest delinquent accounts for legal or restructuring actions",
+    "SQL": "SELECT ld_code, total_amount_overdue FROM edoc_alf_new_data_loan__mnp ORDER BY total_amount_overdue DESC LIMIT 5;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show number of overdue loans per debt collection reason",
+    "evidence": "Understanding debt causes supports better product design and risk modeling",
+    "SQL": "SELECT reasons_for_debt_collect, COUNT(*) AS num_cases FROM edoc_alf_new_data_loan__mnp WHERE total_amount_overdue > 0 GROUP BY reasons_for_debt_collect;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find total overdue amount grouped by loan product",
+    "evidence": "Supports identification of high-risk products",
+    "SQL": "SELECT loan_product, SUM(total_amount_overdue) AS total_overdue FROM edoc_alf_new_data_loan__mnp GROUP BY loan_product ORDER BY total_overdue DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Count number of loans marked as PD confirmed",
+    "evidence": "These loans have been evaluated and classified as high risk",
+    "SQL": "SELECT COUNT(*) AS pd_confirmed_loans FROM edoc_alf_new_data_loan__mnp WHERE pd_confirm = 'YES';"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show average overdue amount by customer segment",
+    "evidence": "Segment-level risk analysis supports pricing and limit control",
+    "SQL": "SELECT segment, AVG(total_stmt_amt_lcy) AS avg_overdue FROM TBL_LD GROUP BY segment;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List customers with multiple confirmed PD loans",
+    "evidence": "Multiple PD loans increase exposure and portfolio risk",
+    "SQL": "SELECT customer_id, COUNT(*) AS pd_loan_count FROM edoc_alf_new_data_loan__mnp WHERE pd_confirm = 'YES' GROUP BY customer_id HAVING COUNT(*) > 1;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find loans with both overdue and current interest applied",
+    "evidence": "Interest accumulation may worsen the debt status",
+    "SQL": "SELECT ld_code, customer_id, total_amount_overdue, current_interest FROM edoc_alf_new_data_loan__mnp WHERE total_amount_overdue > 0 AND current_interest > 0;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List segments with the highest number of customers holding loan contracts",
+    "evidence": "Helps RM teams prioritize segment-level relationship management",
+    "SQL": "SELECT c.segment, COUNT(DISTINCT l.customer_id) AS customer_count FROM t24_customer__s2 c JOIN t24_ld_loans_and_depo__mnp l ON c.customer_code = l.customer_id GROUP BY c.segment ORDER BY customer_count DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show average total debt per customer by segment",
+    "evidence": "RM teams can focus on high-value segments for upselling or retention",
+    "SQL": "SELECT segment, AVG(total_stmt_amt_lcy) AS avg_debt FROM TBL_LD GROUP BY segment ORDER BY avg_debt DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find 'Mass Affluent' customers with total debt over 1 billion VND",
+    "evidence": "High-net-worth customers may need priority RM attention",
+    "SQL": "SELECT customer_id, total_stmt_amt_lcy FROM TBL_LD WHERE segment = 'Mass Affluent' AND total_stmt_amt_lcy > 1000000000;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Count number of loan contracts per customer for each segment",
+    "evidence": "Track product penetration and potential overexposure",
+    "SQL": "SELECT c.segment, l.customer_id, COUNT(*) AS contract_count FROM t24_customer__s2 c JOIN t24_ld_loans_and_depo__mnp l ON c.customer_code = l.customer_id GROUP BY c.segment, l.customer_id;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find customers with more than 3 active loan contracts",
+    "evidence": "High-volume clients may require personalized RM strategies",
+    "SQL": "SELECT customer_id, COUNT(*) AS active_contracts FROM t24_ld_loans_and_depo__mnp GROUP BY customer_id HAVING COUNT(*) > 3;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Get total debt by year and segment",
+    "evidence": "Trend analysis across customer segments helps RM planning",
+    "SQL": "SELECT year, segment, SUM(total_stmt_amt_lcy) AS yearly_total FROM TBL_LD GROUP BY year, segment ORDER BY year DESC, yearly_total DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List segments with highest average debt per contract",
+    "evidence": "Used to benchmark RM effectiveness across segments",
+    "SQL": "SELECT segment, AVG(total_stmt_amt_lcy) AS avg_per_contract FROM TBL_LD GROUP BY segment ORDER BY avg_per_contract DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find customers who signed loan contracts this year",
+    "evidence": "Newly onboarded customers may require onboarding support from RM",
+    "SQL": "SELECT customer_id, contract_no_, value_date FROM t24_ld_loans_and_depo__mnp WHERE EXTRACT(YEAR FROM value_date) = EXTRACT(YEAR FROM CURRENT_DATE);"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show total debt per customer with more than one loan contract",
+    "evidence": "RM should monitor debt concentration in repeat borrowers",
+    "SQL": "SELECT customer_id, SUM(total_stmt_amt_lcy) AS total_debt FROM TBL_LD GROUP BY customer_id HAVING COUNT(contract_no_) > 1;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Rank customers by total debt across all segments",
+    "evidence": "Top clients should be managed by senior RM",
+    "SQL": "SELECT customer_id, segment, SUM(total_stmt_amt_lcy) AS total_debt FROM TBL_LD GROUP BY customer_id, segment ORDER BY total_debt DESC LIMIT 10;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List customers with total loan balance above 2 billion VND",
+    "evidence": "Large exposures require closer credit monitoring",
+    "SQL": "SELECT customer_id, SUM(total_stmt_amt_lcy) AS total_debt FROM TBL_LD GROUP BY customer_id HAVING SUM(total_stmt_amt_lcy) > 2000000000;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show total loan balance by customer segment",
+    "evidence": "Helps identify high-risk or high-value segments",
+    "SQL": "SELECT segment, SUM(total_stmt_amt_lcy) AS total_balance FROM TBL_LD GROUP BY segment ORDER BY total_balance DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find average loan value per contract by segment",
+    "evidence": "Indicates lending concentration and ticket size per customer type",
+    "SQL": "SELECT segment, AVG(total_stmt_amt_lcy) AS avg_per_contract FROM TBL_LD GROUP BY segment ORDER BY avg_per_contract DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Identify customers with more than 3 active contracts",
+    "evidence": "Multiple contracts may signal overexposure risk",
+    "SQL": "SELECT customer_id, COUNT(*) AS num_contracts FROM TBL_LD GROUP BY customer_id HAVING COUNT(*) > 3;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show total loan balance per year",
+    "evidence": "Tracks exposure evolution across years",
+    "SQL": "SELECT year, SUM(total_stmt_amt_lcy) AS yearly_total FROM TBL_LD GROUP BY year ORDER BY year;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find top 5 customers with highest loan balance in 2024",
+    "evidence": "High-risk clients for 2024 portfolio review",
+    "SQL": "SELECT customer_id, SUM(total_stmt_amt_lcy) AS total_2024 FROM TBL_LD WHERE year = 2024 GROUP BY customer_id ORDER BY total_2024 DESC LIMIT 5;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List total loan balance by currency type",
+    "evidence": "Used for FX risk exposure and currency hedging",
+    "SQL": "SELECT currency, SUM(total_stmt_amt_lcy) AS total_balance FROM TBL_LD GROUP BY currency ORDER BY total_balance DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Compare average loan per contract between segments",
+    "evidence": "RM can use this to adjust strategy across segments",
+    "SQL": "SELECT segment, AVG(total_stmt_amt_lcy) AS avg_loan FROM TBL_LD GROUP BY segment ORDER BY avg_loan DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find customers who received loans in more than 2 years",
+    "evidence": "Multi-year borrowing patterns may imply long-term credit risk",
+    "SQL": "SELECT customer_id, COUNT(DISTINCT year) AS active_years FROM TBL_LD GROUP BY customer_id HAVING COUNT(DISTINCT year) > 2;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show total loan balance by branch code (co_code)",
+    "evidence": "For regional risk analysis and branch performance monitoring",
+    "SQL": "SELECT co_code, SUM(total_stmt_amt_lcy) AS total_balance FROM TBL_LD GROUP BY co_code ORDER BY total_balance DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List all loans disbursed today",
+    "evidence": "Reviewing new disbursements supports daily credit monitoring",
+    "SQL": "SELECT customer_id, contract_no_, total_stmt_amt_lcy FROM TBL_LD WHERE date(year || '-' || month || '-' || day) = date('now');"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show total loan disbursement amount today",
+    "evidence": "Helps monitor daily exposure inflow",
+    "SQL": "SELECT SUM(total_stmt_amt_lcy) AS total_today FROM TBL_LD WHERE date(year || '-' || month || '-' || day) = date('now');"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Count the number of loan contracts issued today",
+    "evidence": "Daily contract volume indicates lending activity",
+    "SQL": "SELECT COUNT(*) AS num_contracts FROM TBL_LD WHERE date(year || '-' || month || '-' || day) = date('now');"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find average loan amount disbursed today",
+    "evidence": "Used to evaluate ticket size per contract on a daily basis",
+    "SQL": "SELECT AVG(total_stmt_amt_lcy) AS avg_loan_today FROM TBL_LD WHERE date(year || '-' || month || '-' || day) = date('now');"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List segments with loans disbursed today",
+    "evidence": "Helps identify which customer segments are active",
+    "SQL": "SELECT DISTINCT segment FROM TBL_LD WHERE date(year || '-' || month || '-' || day) = date('now');"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show loan disbursement per segment for today",
+    "evidence": "Allows RM teams to track segment-wise activity",
+    "SQL": "SELECT segment, SUM(total_stmt_amt_lcy) AS segment_total FROM TBL_LD WHERE date(year || '-' || month || '-' || day) = date('now') GROUP BY segment ORDER BY segment_total DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List top 5 customers with highest loan disbursement today",
+    "evidence": "Prioritize key clients who increased their exposure today",
+    "SQL": "SELECT customer_id, SUM(total_stmt_amt_lcy) AS total_disbursed FROM TBL_LD WHERE date(year || '-' || month || '-' || day) = date('now') GROUP BY customer_id ORDER BY total_disbursed DESC LIMIT 5;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Get number of loan contracts by currency today",
+    "evidence": "Track FX lending activity for daily compliance",
+    "SQL": "SELECT currency, COUNT(*) AS num_contracts FROM TBL_LD WHERE date(year || '-' || month || '-' || day) = date('now') GROUP BY currency;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show total disbursed loan amount by branch code today",
+    "evidence": "Monitor daily activity at branch level for risk oversight",
+    "SQL": "SELECT co_code, SUM(total_stmt_amt_lcy) AS total_branch_disbursed FROM TBL_LD WHERE date(year || '-' || month || '-' || day) = date('now') GROUP BY co_code ORDER BY total_branch_disbursed DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find loan contracts disbursed today with value over 1 billion VND",
+    "evidence": "Large-value disbursements require closer scrutiny",
+    "SQL": "SELECT contract_no_, customer_id, total_stmt_amt_lcy FROM TBL_LD WHERE total_stmt_amt_lcy > 1000000000 AND date(year || '-' || month || '-' || day) = date('now');"
+  },
+    {
+    "db_id": "vp_bank",
+    "question": "Show total transaction amount for today",
+    "evidence": "Helps monitor daily liquidity movement",
+    "SQL": "SELECT SUM(amt_lcy) AS total_today FROM t24_stmt_entry__fa WHERE booking_date = DATE('now');"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List transaction codes with total amount processed today",
+    "evidence": "Identifies which transaction types dominate daily volume",
+    "SQL": "SELECT transaction_code, SUM(amt_lcy) AS total_amount FROM t24_stmt_entry__fa WHERE booking_date = DATE('now') GROUP BY transaction_code ORDER BY total_amount DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find number of transactions recorded today",
+    "evidence": "Used to assess daily transaction workload",
+    "SQL": "SELECT COUNT(*) AS transaction_count FROM t24_stmt_entry__fa WHERE booking_date = DATE('now');"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Get average transaction value for today",
+    "evidence": "Average size helps monitor retail vs. institutional activity",
+    "SQL": "SELECT AVG(amt_lcy) AS avg_txn_today FROM t24_stmt_entry__fa WHERE booking_date = DATE('now');"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List top 5 transactions by value for today",
+    "evidence": "High-value flows may affect liquidity and exposure",
+    "SQL": "SELECT stmt_entry_id, our_reference, amt_lcy FROM t24_stmt_entry__fa WHERE booking_date = DATE('now') ORDER BY amt_lcy DESC LIMIT 5;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show total transaction volume by hour for today",
+    "evidence": "Intraday flow analysis supports operational planning",
+    "SQL": "SELECT strftime('%H', booking_date || ' 00:00:00') AS hour, SUM(amt_lcy) AS total_hourly FROM t24_stmt_entry__fa WHERE booking_date = DATE('now') GROUP BY hour ORDER BY hour;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Get total transaction value per customer (our_reference) for today",
+    "evidence": "Detects clients with highest cash flow today",
+    "SQL": "SELECT our_reference, SUM(amt_lcy) AS total_amount FROM t24_stmt_entry__fa WHERE booking_date = DATE('now') GROUP BY our_reference ORDER BY total_amount DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find total number of unique transaction codes used today",
+    "evidence": "Variety of transaction types indicates market breadth",
+    "SQL": "SELECT COUNT(DISTINCT transaction_code) AS unique_txn_codes FROM t24_stmt_entry__fa WHERE booking_date = DATE('now');"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show min, max, and average transaction amount for today",
+    "evidence": "Spread of transaction values highlights volatility",
+    "SQL": "SELECT MIN(amt_lcy) AS min_txn, MAX(amt_lcy) AS max_txn, AVG(amt_lcy) AS avg_txn FROM t24_stmt_entry__fa WHERE booking_date = DATE('now');"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List transaction codes that generated more than 10 billion VND today",
+    "evidence": "Unusually large flows in a single code may require review",
+    "SQL": "SELECT transaction_code, SUM(amt_lcy) AS total_amount FROM t24_stmt_entry__fa WHERE booking_date = DATE('now') GROUP BY transaction_code HAVING SUM(amt_lcy) > 10000000000;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List all users who made a transaction today",
+    "evidence": "Track user activity to identify daily engagement",
+    "SQL": "SELECT DISTINCT our_reference FROM t24_stmt_entry__fa WHERE booking_date = DATE('now');"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find the user with the highest transaction amount today",
+    "evidence": "Highlight high-volume customers for potential upsell",
+    "SQL": "SELECT our_reference, SUM(amt_lcy) AS total_amount FROM t24_stmt_entry__fa WHERE booking_date = DATE('now') GROUP BY our_reference ORDER BY total_amount DESC LIMIT 1;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show average transaction value per user for today",
+    "evidence": "Helps identify user-level ticket size",
+    "SQL": "SELECT our_reference, AVG(amt_lcy) AS avg_amount FROM t24_stmt_entry__fa WHERE booking_date = DATE('now') GROUP BY our_reference;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List users with more than 5 transactions today",
+    "evidence": "Frequent transactions may indicate automated or business accounts",
+    "SQL": "SELECT our_reference, COUNT(*) AS txn_count FROM t24_stmt_entry__fa WHERE booking_date = DATE('now') GROUP BY our_reference HAVING COUNT(*) > 5;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Get total transaction amount for each user today sorted descending",
+    "evidence": "Daily customer activity report for RM tracking",
+    "SQL": "SELECT our_reference, SUM(amt_lcy) AS total_today FROM t24_stmt_entry__fa WHERE booking_date = DATE('now') GROUP BY our_reference ORDER BY total_today DESC;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show the user with the largest single transaction today",
+    "evidence": "Single high-value transactions may require AML review",
+    "SQL": "SELECT our_reference, amt_lcy FROM t24_stmt_entry__fa WHERE booking_date = DATE('now') ORDER BY amt_lcy DESC LIMIT 1;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Find users who made transactions below 1 million VND only today",
+    "evidence": "Low-value users may fit different engagement strategy",
+    "SQL": "SELECT our_reference FROM t24_stmt_entry__fa WHERE booking_date = DATE('now') GROUP BY our_reference HAVING MAX(amt_lcy) < 1000000;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Count how many users made transactions using each transaction code today",
+    "evidence": "Identify which transaction types are more widely used",
+    "SQL": "SELECT transaction_code, COUNT(DISTINCT our_reference) AS user_count FROM t24_stmt_entry__fa WHERE booking_date = DATE('now') GROUP BY transaction_code;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "List users whose total transaction amount today exceeds 5 billion VND",
+    "evidence": "High-exposure users may need credit or compliance review",
+    "SQL": "SELECT our_reference, SUM(amt_lcy) AS total_amount FROM t24_stmt_entry__fa WHERE booking_date = DATE('now') GROUP BY our_reference HAVING total_amount > 5000000000;"
+  },
+  {
+    "db_id": "vp_bank",
+    "question": "Show min, max transaction amount per user for today",
+    "evidence": "Helps understand user transaction range and variability",
+    "SQL": "SELECT our_reference, MIN(amt_lcy) AS min_amt, MAX(amt_lcy) AS max_amt FROM t24_stmt_entry__fa WHERE booking_date = DATE('now') GROUP BY our_reference;"
+  }
+]

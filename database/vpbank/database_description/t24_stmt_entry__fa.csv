@@ -1,0 +1,9 @@
+﻿Column,Column Description,Value Description,Type,Example Values
+stmt_entry_id,,,TEXT,"610fff7fc222cb2c3357230f63ee7fd0, 1f08adb5822e41261d3ec9d1b6d7c312, f90dcf3d7cd75f45311e8156489a7ba9"
+transaction_code,,,INTEGER,217
+our_reference,,,TEXT,"61cef682310926036cccc2f045a0e643, 9cc8e836973de8c7d1408027ffc2e4b1"
+amt_lcy,,,INTEGER,"75009352, 34092544, 31777691"
+booking_date,,,DATE,2025-05-26
+year,,,TEXT,2025
+month,,,TEXT,5
+day,,,TEXT,26
